@@ -95,7 +95,7 @@ var Youtube = {
       default: 640
     },
     startTime: {
-      type: [Number, String],
+      type: [Number],
       default: 0
     },
     resize: {
@@ -146,12 +146,22 @@ var Youtube = {
         return
       }
 
+      var params = { videoId: videoId };
+
+      if (typeof this.startTime === 'number') { ///this.playerVars.start
+        params.startSeconds = this.startTime;
+      }
+
+      if (typeof this.playerVars.end === 'number') {
+        params.endSeconds = this.playerVars.end;
+      }
+
       if (this.playerVars.autoplay === 1) {
-        this.player.loadVideoById({ videoId: videoId, startSeconds: this.startTime });
+        this.player.loadVideoById(params);
         return
       }
 
-      this.player.cueVideoById({ videoId: videoId });
+      this.player.cueVideoById(params);
     }, 
     playerPlaybackRateChange(e) {
       if (e.data !== null ) {
